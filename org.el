@@ -21,7 +21,7 @@
            (curr-date-stamp (format-time-string "%Y-%m.org"))
            (file-name (expand-file-name curr-date-stamp "~/org/")))
       (if visit
-	  (switch-to-buffer (org-capture-target-buffer file-name))
+	  (find-file file-name)
       	  (set-buffer (org-capture-target-buffer file-name)))
       (goto-char (point-max))))
 
@@ -33,12 +33,24 @@
   (defun my/visit-inbox ()
     (interactive)
     (find-file "~/org/inbox.org"))
-  
+
+  (defun my/start-page ()
+    (interactive)
+    (find-file "~/org/index.org"))
+  (setq org-hide-leading-stars t) 
   (setq org-tag-alist '((:startgroup . nil)
 			("@work" . ?w)("@home" . ?h)
 			(:endgroup . nil)
 			("@note" . ?o)("@next" . ?n)("@urgent" . ?u)
 			))
+  (setq org-feed-alist
+	'(("Krebs"
+	   "https://krebsonsecurity.com/feed/"
+	   "~/org/feeds.org" "Krebs on Security")
+	  ("Bleeping Computer"
+	   "https://www.bleepingcomputer.com/feed/"
+	   "~/org/feeds.org" "Bleeping Computer")))
+
 
   
   (setq org-capture-templates
@@ -65,7 +77,8 @@
 	 ("C-c c" . org-capture)
 	 ("C-c a" . org-agenda)
 	 ("C-c p j" . my/visit-journal-file-today)
-	 ("C-c p i" . my/visit-inbox))
+	 ("C-c p i" . my/visit-inbox)
+	 ("C-c p s" . my/start-page))
   :config
     (org-add-link-type "x-devonthink-item" 'org-dtp-open)
   )

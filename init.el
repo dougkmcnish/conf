@@ -5,6 +5,10 @@
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
 
+(when (eq system-type 'darwin)
+  (setq mac-option-modifier 'meta)
+  )
+
 
 (defun my/org-time-stamp-now ()
   (interactive)
@@ -39,16 +43,16 @@
 
 (load "~/.emacs-git.d/org.el")
 
-;; (load "~/.emacs-git.d/org-roam.el")
+(load "~/.emacs-git.d/org-roam.el")
 
 
-(custom-set-variables
+(CUSTOM-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(counsel diminish magit ivy use-package monokai-theme gruvbox-theme zenburn-theme solarized-theme muse org-journal)))
+   '(org-roam counsel diminish magit ivy use-package monokai-theme gruvbox-theme zenburn-theme solarized-theme muse org-journal)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
