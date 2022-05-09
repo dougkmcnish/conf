@@ -1,10 +1,7 @@
 (use-package org
   :ensure t
   :init
-  (setq org-log-done t)
-  (setq org-skip-scheduled-if-done t)
-  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-  (setq org-agenda-files (list "~/org/"))
+			       
   (setq org-refile-targets '( ("~/org/projects.org" :maxlevel . 2)
 			      ("~/org/inbox.org" :maxlevel . 2)
 			      ("~/org/areas.org" :maxlevel . 2)
@@ -15,11 +12,11 @@
 
 
   (defun my/get-journal-file-today (&optional visit)
-    "Capture to, or optionally visit, today's journal file." 
+    "Capture to, or optionally visit, today's journal file."
     (interactive)
     (let* (
-           (curr-date-stamp (format-time-string "%Y-%m.org"))
-           (file-name (expand-file-name curr-date-stamp "~/org/")))
+           (curr-date-stamp (format-time-string "%Y_%m_%d.org"))
+           (file-name (expand-file-name curr-date-stamp "~/org/journal/")))
       (if visit
 	  (find-file file-name)
       	  (set-buffer (org-capture-target-buffer file-name)))
@@ -37,6 +34,7 @@
   (defun my/start-page ()
     (interactive)
     (find-file "~/org/index.org"))
+  
   (setq org-hide-leading-stars t) 
   (setq org-tag-alist '((:startgroup . nil)
 			("@work" . ?w)("@home" . ?h)
@@ -54,11 +52,11 @@
 
   
   (setq org-capture-templates
-	'(("i" "Inbox TODO"
-	   entry (file "~/org/inbox.org")
+	'(("t" "Inbox TODO"
+	   entry (file "~/org/beorg/inbox.org")
 	   "* TODO %?  %^G\n  SCHEDULED: %t"
 	   :empty-lines 1)
-	  ("t" "Journal TODO"
+	  ("J" "Journal TODO"
 	   entry (function my/get-journal-file-today)
 	   "* TODO %?  %^g\n  SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
 	   :empty-lines 1)
@@ -76,9 +74,16 @@
   :bind (("C-c l" . org-store-link)
 	 ("C-c c" . org-capture)
 	 ("C-c a" . org-agenda)
+	 ("C-c o S" . org-save-all-org-buffers)
 	 ("C-c p j" . my/visit-journal-file-today)
 	 ("C-c p i" . my/visit-inbox)
-	 ("C-c p s" . my/start-page))
+	 ("C-c p s" . my/start-page)
+	 ("C-c o p" . org-property-action))
   :config
+    (setq org-startup-indented t)
+    (setq org-log-done t)
+    (setq org-skip-scheduled-if-done t)
+    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+    (setq org-agenda-files (list "~/org/"))
     (org-add-link-type "x-devonthink-item" 'org-dtp-open)
   )
