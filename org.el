@@ -2,12 +2,15 @@
   :ensure t
   :init
 			       
-  (setq org-refile-targets '( ("~/org/projects.org" :maxlevel . 2)
-			      ("~/org/inbox.org" :maxlevel . 2)
-			      ("~/org/areas.org" :maxlevel . 2)
-			      ("~/org/reading.org" :maxlevel . 2)
-			      ("~/org/resources.org" :maxlevel . 2)
-			      ("~/org/archive.org" :maxlevel . 2)))
+  (setq org-refile-targets '(
+			     ("~/org/beorg/inbox.org" :maxlevel . 2)
+			     ("~/org/beorg/future.org" :maxlevel . 2)
+                             ("~/org/pages/projects.org" :maxlevel . 2)
+			     ("~/org/pages/areas.org" :maxlevel . 2)
+			     ("~/org/pages/reading.org" :maxlevel . 2)
+			     ("~/org/pages/resources.org" :maxlevel . 2)
+			     ("~/org/pages/archive.org" :maxlevel . 2)
+                             ))
 
 
 
@@ -29,11 +32,11 @@
 
   (defun my/visit-inbox ()
     (interactive)
-    (find-file "~/org/inbox.org"))
+    (find-file "~/org/beorg/inbox.org"))
 
   (defun my/start-page ()
     (interactive)
-    (find-file "~/org/index.org"))
+    (find-file "~/org/pages/index.org"))
   
   (setq org-hide-leading-stars t) 
   (setq org-tag-alist '((:startgroup . nil)
@@ -49,13 +52,15 @@
 	   "https://www.bleepingcomputer.com/feed/"
 	   "~/org/feeds.org" "Bleeping Computer")))
 
-
-  
   (setq org-capture-templates
 	'(("t" "Inbox TODO"
-	   entry (file "~/org/beorg/inbox.org")
+	   entry (file+headline "~/org/beorg/inbox.org" "Todo")
 	   "* TODO %?  %^G\n  SCHEDULED: %t"
 	   :empty-lines 1)
+          ("b" "Book"
+           entry (file "~/org/pages/reading.org")
+           "* %^{TITLE} %^{AUTHOR}p %^{PUBLISHED}p %^{PAGES|Unspec}p %^{RATING}p"
+           :empty-lines 1)
 	  ("J" "Journal TODO"
 	   entry (function my/get-journal-file-today)
 	   "* TODO %?  %^g\n  SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
@@ -65,6 +70,7 @@
 	   "* %? \n  --Entered on %U\n %i\n  %a"
 	   :empty-lines 1)
 	  ))
+
   
   (defun org-dtp-open (record-location)
     "Visit the dtp message with the given Message-ID."
@@ -84,6 +90,14 @@
     (setq org-log-done t)
     (setq org-skip-scheduled-if-done t)
     (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-    (setq org-agenda-files (list "~/org/"))
+    (setq org-agenda-files (list "~/org/pages/" "~/org/beorg/" "~/org/journal/"))
     (org-add-link-type "x-devonthink-item" 'org-dtp-open)
-  )
+    )
+
+
+(use-package org-superstar
+  :ensure t
+  :after org
+  :hook (org-mode . org-superstar-mode))
+
+
