@@ -1,25 +1,13 @@
 (use-package org
   :ensure t
   :init
-			       
-  (setq org-refile-targets '(
-			     ("~/org/beorg/inbox.org" :maxlevel . 2)
-			     ("~/org/beorg/future.org" :maxlevel . 2)
-                             ("~/org/pages/projects.org" :maxlevel . 2)
-			     ("~/org/pages/areas.org" :maxlevel . 2)
-			     ("~/org/pages/reading.org" :maxlevel . 2)
-			     ("~/org/pages/resources.org" :maxlevel . 2)
-			     ("~/org/pages/archive.org" :maxlevel . 2)
-                             ))
-
-
 
   (defun my/get-journal-file-today (&optional visit)
     "Capture to, or optionally visit, today's journal file."
     (interactive)
     (let* (
-           (curr-date-stamp (format-time-string "%Y_%m_%d.org"))
-           (file-name (expand-file-name curr-date-stamp "~/org/journal/")))
+           (curr-date-stamp (format-time-string "%Y-%m.org"))
+           (file-name (expand-file-name curr-date-stamp "~/org/pages/")))
       (if visit
 	  (find-file file-name)
       	  (set-buffer (org-capture-target-buffer file-name)))
@@ -34,9 +22,9 @@
     (interactive)
     (find-file "~/org/beorg/inbox.org"))
 
-  (defun my/start-page ()
+  (defun my/visit-projects ()
     (interactive)
-    (find-file "~/org/pages/index.org"))
+    (find-file "~/org/projects/index.org"))
   
   (setq org-hide-leading-stars t) 
   (setq org-tag-alist '((:startgroup . nil)
@@ -47,10 +35,10 @@
   (setq org-feed-alist
 	'(("Krebs"
 	   "https://krebsonsecurity.com/feed/"
-	   "~/org/feeds.org" "Krebs on Security")
+	   "~/org/pages/feeds.org" "Krebs on Security")
 	  ("Bleeping Computer"
 	   "https://www.bleepingcomputer.com/feed/"
-	   "~/org/feeds.org" "Bleeping Computer")))
+	   "~/org/pages/feeds.org" "Bleeping Computer")))
 
   (setq org-capture-templates
 	'(("t" "Inbox TODO"
@@ -58,7 +46,7 @@
 	   "* TODO %?  %^G\n  SCHEDULED: %t"
 	   :empty-lines 1)
           ("b" "Book"
-           entry (file "~/org/pages/reading.org")
+           entry (file "~/org/beorg/reading.org")
            "* %^{TITLE} %^{AUTHOR}p %^{PUBLISHED}p %^{PAGES|Unspec}p %^{RATING}p"
            :empty-lines 1)
 	  ("J" "Journal TODO"
@@ -83,16 +71,21 @@
 	 ("C-c o S" . org-save-all-org-buffers)
 	 ("C-c p j" . my/visit-journal-file-today)
 	 ("C-c p i" . my/visit-inbox)
-	 ("C-c p s" . my/start-page)
+	 ("C-c p p" . my/visit-projects)
 	 ("C-c o p" . org-property-action))
   :config
-    (setq org-startup-indented t)
-    (setq org-log-done t)
-    (setq org-skip-scheduled-if-done t)
-    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-    (setq org-agenda-files (list "~/org/pages/" "~/org/beorg/" "~/org/journal/"))
-    (org-add-link-type "x-devonthink-item" 'org-dtp-open)
-    )
+  (setq org-agenda-files (list
+			  "~/org/pages/"
+			  "~/org/beorg/"
+			  "~/org/projects/"
+			  "~/org/journal/"))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
+  (setq org-startup-indented t)
+  (setq org-log-done t)
+  (setq org-skip-scheduled-if-done t)
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  (org-add-link-type "x-devonthink-item" 'org-dtp-open)
+  )
 
 
 (use-package org-superstar
