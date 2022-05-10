@@ -47,22 +47,7 @@
 
 ;;(load "~/.emacs-git.d/org-roam.el")
 
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load custom-file)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(gruvbox))
- '(custom-safe-themes
-   '("1436d643b98844555d56c59c74004eb158dc85fc55d2e7205f8d9b8c860e177f" default))
- '(org-agenda-files
-   '("/Users/doug/org/2022-02.org" "/Users/doug/org/2022-03.org" "/Users/doug/org/2022-04.org" "/Users/doug/org/2022-05.org" "/Users/doug/org/24 Farm View.org" "/Users/doug/org/Agenda.org" "/Users/doug/org/Emacs Lisp.org" "/Users/doug/org/archive.org" "/Users/doug/org/areas.org" "/Users/doug/org/capture.org" "/Users/doug/org/ccps.org" "/Users/doug/org/contents.org" "/Users/doug/org/doug.org" "/Users/doug/org/hipaa.org" "/Users/doug/org/inbox.org" "/Users/doug/org/index.org" "/Users/doug/org/notes.org" "/Users/doug/org/personal.org" "/Users/doug/org/projects.org" "/Users/doug/org/reading.org" "/Users/doug/org/resources.org" "/Users/doug/org/sop.org" "/Users/doug/org/work.org"))
- '(package-selected-packages
-   '(yasnippet-snippets yasnippet org-superstar counsel diminish magit ivy use-package monokai-theme gruvbox-theme zenburn-theme solarized-theme muse org-journal)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-level-1 ((t (:foreground "#83a598" :weight bold :height 1.1)))))
+
