@@ -2,6 +2,20 @@
   :ensure t
   :init
 
+  (defun org-latex-format-headline-colored-keywords-function
+      (todo todo-type priority text tags info)
+    (concat
+     (cond ((string= todo "TODO")(and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo)))
+	   ((string= todo "DONE")(and todo (format "{\\color{green}\\bfseries\\sffamily %s} " todo))))
+     (and priority (format "\\framebox{\\#%c} " priority))
+     text
+     (and tags
+          (format "\\hfill{}\\textsc{%s}"
+		  (mapconcat (lambda (tag) (org-latex-plain-text tag info))
+			     tags ":")))))
+
+  (setq org-latex-format-headline-function 'org-latex-format-headline-colored-keywords-function)
+
   (defun my/get-journal-file-today (&optional visit)
     "Capture to, or optionally visit, today's journal file."
     (interactive)
@@ -78,7 +92,8 @@
 			  "~/org/pages/"
 			  "~/org/beorg/"
 			  "~/org/projects/"
-			  "~/org/journal/"))
+			  ))
+  (setq org-export-backends '(ascii html icalendar latex odt md))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
   (setq org-startup-indented t)
   (setq org-log-done t)
