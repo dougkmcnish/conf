@@ -6,8 +6,8 @@
    (setq org-roam-dailies-capture-templates
  	'(("d" "default" entry
             "* %?"
-            :target (file+head "%<%Y-%m-%d>.org"
-                               "#+title: %<%Y-%m-%d>\n"))))
+            :target (file+head "%<%Y_%m_%d>.org"
+                               "#+title: %<%Y_%m_%d>\n"))))
    :bind (("C-c r f" . org-roam-node-find)
  	 ("C-c r r" . org-roam-node-random)
  	 ("C-c r i" . org-roam-node-insert)

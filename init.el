@@ -42,10 +42,10 @@
 
 ;;(load "~/.emacs-git.d/clojure.el")
 
+(load "~/.emacs-git.d/markdown-mode.el")
 (load "~/.emacs-git.d/org.el")
-
-
-;;(load "~/.emacs-git.d/org-roam.el")
+(load "~/.emacs-git.d/deft.el")
+(load "~/.emacs-git.d/org-roam.el")
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
