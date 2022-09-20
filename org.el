@@ -57,7 +57,7 @@
   (setq org-capture-templates
 	'(("t" "Inbox TODO"
 	   entry (file+headline "~/org/beorg/inbox.org" "Todo")
-	   "* TODO %?  %^G\n  SCHEDULED: %t"
+	   "* TODO %?\n    SCHEDULED: %t\n %a"
 	   :empty-lines 1)
           ("b" "Book"
            entry (file "~/org/beorg/reading.org")
@@ -65,7 +65,7 @@
            :empty-lines 1)
 	  ("J" "Journal TODO"
 	   entry (function my/get-journal-file-today)
-	   "* TODO %?  %^g\n  SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
+	   "* TODO %?\n    SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
 	   :empty-lines 1)
 	  ("j" "Daily Journal Entry"
 	   entry (function my/get-journal-file-today)
@@ -93,6 +93,7 @@
 			  "~/org/beorg/"
 			  "~/org/projects/"
 			  ))
+  (setq org-archive-location "~/org/archived.org::datetree/* Completed")
   (setq org-export-backends '(ascii html icalendar latex odt md))
   (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
   (setq org-startup-indented t)
@@ -109,3 +110,6 @@
   :hook (org-mode . org-superstar-mode))
 
 
+(use-package ol-notmuch
+  :ensure t
+  :after org)

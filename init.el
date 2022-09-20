@@ -46,6 +46,7 @@
 (load "~/.emacs-git.d/org.el")
 (load "~/.emacs-git.d/deft.el")
 (load "~/.emacs-git.d/org-roam.el")
+(load "~/.emacs-git.d/notmuch.el")
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file)
