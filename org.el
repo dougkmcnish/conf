@@ -77,7 +77,7 @@
   (defun org-dtp-open (record-location)
     "Visit the dtp message with the given Message-ID."
     (shell-command (concat "open x-devonthink-item:" record-location)))
-  
+  (setq org-odt-preferred-output-format "docx")
 
   :bind (("C-c l" . org-store-link)
 	 ("C-c c" . org-capture)

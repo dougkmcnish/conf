@@ -1,9 +1,19 @@
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load custom-file)
+
 (require 'package)
 ;; package sources for installing org-roam stuff.
 ;;(set-face-attribute 'default nil :height 160)
 
 (setq inhibit-startup-screen t)
 (tool-bar-mode -1)
+
+;; Transparent encryption
+(setenv "GPG_AGENT_INFO" nil)
+(setq epa-pinentry-mode 'loopback)
+
+(setq auth-sources
+      '((:source "~/.authinfo.gpg")))
 
 (when (eq system-type 'darwin)
   (setq mac-option-modifier 'meta)
@@ -16,11 +26,12 @@
   )
 
 (add-to-list 'exec-path "~/.local/bin/")
+
 (setq backup-directory-alist `(("." . "~/.emacs.d/saves/")))
 
-(add-to-list 'package-archives
-	     '("melpa" . "http://stable.melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
 (unless package-archive-contents
@@ -47,8 +58,7 @@
 (load "~/.emacs-git.d/deft.el")
 (load "~/.emacs-git.d/org-roam.el")
 (load "~/.emacs-git.d/notmuch.el")
+(load "~/.emacs-git.d/elfeed.el")
 
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file)
 
 

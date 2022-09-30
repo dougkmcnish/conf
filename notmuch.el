@@ -7,19 +7,22 @@
 
 
 (use-package notmuch
-  :ensure t)
+  :ensure t
+  :bind (("C-c o m" . notmuch))
+  :config
+  (define-key notmuch-show-mode-map "d"
+    (lambda ()
+      "Mark Message as Trash"
+      (interactive)
+      (notmuch-show-tag (list "+deleted" "-inbox"))))
+  )
 
-(define-key notmuch-show-mode-map "D"
-  (lambda ()
-    "Mark Message as Trash"
-    (interactive)
-    (notmuch-show-tag (list "+trash" "-inbox"))))
 
-(define-key notmuch-show-mode-map "d"
-  (lambda ()
-    "toggle deleted tag for message"
-    (interactive)
-    (if (member "deleted" (notmuch-show-get-tags))
-        (notmuch-show-tag (list "-deleted"))
-      (notmuch-show-tag (list "+deleted")))))
+;; (define-key notmuch-show-mode-map "D"
+;;   (lambda ()
+;;     "toggle deleted tag for message"
+;;     (interactive)
+;;     (if (member "deleted" (notmuch-show-get-tags))
+;;         (notmuch-show-tag (list "-deleted"))
+;;       (notmuch-show-tag (list "+deleted")))))
 
