@@ -59,6 +59,6 @@
 (load "~/.emacs-git.d/org-roam.el")
 (load "~/.emacs-git.d/notmuch.el")
 (load "~/.emacs-git.d/elfeed.el")
-
+(load "~/.emacs-git.d/mastodon.el")
 
 
