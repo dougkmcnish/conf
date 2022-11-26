@@ -1,11 +1,11 @@
 (use-package yasnippet
-  :ensure t
+  :straight t
   :diminish
   :config
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets
-  :ensure t
+  :straight t
   :after yasnippet)
 
 

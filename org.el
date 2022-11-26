@@ -1,5 +1,5 @@
 (use-package org
-  :ensure t
+  :straight t
   :init
 
   (defun org-latex-format-headline-colored-keywords-function
@@ -105,11 +105,11 @@
 
 
 (use-package org-superstar
-  :ensure t
+  :straight t
   :after org
   :hook (org-mode . org-superstar-mode))
 
 
 (use-package ol-notmuch
-  :ensure t
+  :straight t
   :after org)

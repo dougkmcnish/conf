@@ -1,9 +1,9 @@
 (use-package elfeed
-  :ensure t)
+  :straight t)
 
 
 (use-package elfeed-protocol
-  :ensure t
+  :straight t
   :after elfeed
   :bind (("C-c o e" . elfeed))
   :init
@@ -17,10 +17,10 @@
 
 (use-package elfeed-autotag
   :after elfeed
-  :ensure t)
+  :straight t)
 
 (use-package elfeed-org
-  :ensure t
+  :straight t
   :after elfeed
   :init
   (elfeed-org)

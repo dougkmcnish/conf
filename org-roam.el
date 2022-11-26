@@ -1,5 +1,5 @@
 (use-package org-roam
-  :ensure t
+  :straight t
    :init
    (setq org-roam-directory (file-truename "~/org/org-roam"))  
    (setq org-roam-dailies-directory "daily/")

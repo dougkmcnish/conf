@@ -7,7 +7,7 @@
 
 
 (use-package notmuch
-  :ensure t
+  :straight t
   :bind (("C-c o m" . notmuch))
   :config
   (define-key notmuch-show-mode-map "d"

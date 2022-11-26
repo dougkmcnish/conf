@@ -1,8 +1,15 @@
 (use-package clojure-mode
-  :ensure t
+  :straight t
   :mode (("\\.clj\\'" . clojure-mode)
          ("\\.edn\\'" . clojure-mode)))
 
 (use-package cider
-  :ensure t)
+  :straight t)
+
+(use-package paredit
+  :straight t
+  :hook (clojure-mode emacs-lisp-mode))
+
+
+
 

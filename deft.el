@@ -1,5 +1,5 @@
 (use-package deft
-  :ensure t
+  :straight t
   :bind ("<f8>" . deft)
   :commands (deft)
   :config (setq deft-directory "~/.deft"

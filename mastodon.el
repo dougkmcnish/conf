@@ -1,6 +1,6 @@
 (use-package mastodon
-  :ensure t
+  :straight (mastodon :host codeberg :repo "martianh/mastodon.el")
   :init
   (setq mastodon-instance-url "https://infosec.exchange"
-	mastodon-active-user "dougkmcnish")
+	mastodon-active-user "flagranterror")
   )
