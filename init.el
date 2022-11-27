@@ -1,5 +1,6 @@
 (setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file)
+(when (file-exists-p custom-file)
+  (load-file custom-file))
 
 ;(require 'package)
 ; package sources for installing org-roam stuff.
