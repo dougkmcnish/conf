@@ -1,6 +1,29 @@
 #+PROPERTY: header-args :tangle ~/.emacs.d/init.el
 * Core configuration Opts
 ** Init Stuff
+*** Warning
+
+*** straight.el
+Configure =straight.el= to manage our packages. 
+#+BEGIN_SRC emacs-lisp
+  (setq straight-repository-branch "develop")
+
+  (defvar bootstrap-version)
+  (let ((bootstrap-file
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 6))
+    (unless (file-exists-p bootstrap-file)
+      (with-current-buffer
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
+    (load bootstrap-file nil 'nomessage))
+
+  (straight-use-package 'use-package)
+ #+END_SRC
+
 *** Custom File
 First we set up our file for storing =customize= options and load it if it exists. 
 #+BEGIN_SRC emacs-lisp 
@@ -13,7 +36,7 @@ First we set up our file for storing =customize= options and load it if it exist
 We put a stop to a few minor annoyances. 
 #+BEGIN_SRC emacs-lisp 
   (setq inhibit-startup-screen t)
-  (tool-bar-mode v-1)
+  (tool-bar-mode -1)
   (setq backup-directory-alist `(("." . "~/.emacs.d/saves/")))
   (when (eq system-type 'darwin)
         (setq mac-option-modifier 'meta))
@@ -40,27 +63,6 @@ These items are here because I haven't figured out why I set them up in the firs
   (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
 
-*** straight.el
-Configure =straight.el= to manage our packages. 
-#+BEGIN_SRC emacs-lisp
-  (setq straight-repository-branch "develop")
-
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 6))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-
-  (straight-use-package 'use-package)
- #+END_SRC
-
 * Packages
 *** Clojure Mode
 #+BEGIN_SRC emacs-lisp
@@ -76,7 +78,11 @@ Configure =straight.el= to manage our packages.
     :straight t
     :hook (clojure-mode emacs-lisp-mode))
 #+END_SRC
-
+*** Pin Map version to built-in
+#+begin_src emacs-lisp
+  (use-package map
+    :straight (:type built-in))
+#+end_src
 *** Deft
 #+BEGIN_SRC emacs-lisp
   (use-package deft
@@ -157,6 +163,8 @@ Configure =straight.el= to manage our packages.
     (setq mastodon-instance-url "https://infosec.exchange"
           mastodon-active-user "flagranterror")
     )
+  (use-package emojify
+    :straight t)
 #+END_SRC
 
 *** Markdown Mode
@@ -376,6 +384,16 @@ Configure =straight.el= to manage our packages.
     (yas-global-mode 1))
 
   (use-package yasnippet-snippets
-    :straight t
+    :straight (yasnippet-snippets :type git
+                                  :host github
+                                  :repo "AndreaCrotti/yasnippet-snippets")
     :after yasnippet)
 #+END_SRC
+
+*** Element Client
+#+begin_src emacs-lisp
+  (use-package ement
+  :straight (ement :type git
+                   :host github
+                   :repo "alphapapa/ement.el"))
+#+end_src
