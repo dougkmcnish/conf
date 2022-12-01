@@ -3,46 +3,83 @@
 ** Init Stuff
 *** Warning
 
+#+begin_src emacs-lisp
+    ;; This config is managed by a literate config.org file. Changes made here will be overwritten.
+#+end_src
+
+
+*** UI
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-screen t)
+  (scroll-bar-mode -1)        ; Disable visible scrollbar
+  (tool-bar-mode -1)          ; Disable the toolbar
+  (tooltip-mode -1)           ; Disable tooltips
+  (set-fringe-mode 10)
+  (menu-bar-mode -1)
+
+  (set-frame-parameter (selected-frame) 'alpha '(95 . 50))
+  (add-to-list 'default-frame-alist '(alpha . (95 . 50)))
+#+end_src
+
+
 *** straight.el
-Configure =straight.el= to manage our packages. 
+
+First things first, we configure =straight.el= to manage our packages. We select the =develop= branch
+because that's where the magic happens.
+
+We immediately load =org= and =use-package= so theyre available to the system ASAP.
+
+
 #+BEGIN_SRC emacs-lisp
   (setq straight-repository-branch "develop")
 
   (defvar bootstrap-version)
   (let ((bootstrap-file
-         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-        (bootstrap-version 6))
+	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+	(bootstrap-version 6))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-          (url-retrieve-synchronously
-           "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-           'silent 'inhibit-cookies)
-        (goto-char (point-max))
-        (eval-print-last-sexp)))
+	  (url-retrieve-synchronously
+	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+	   'silent 'inhibit-cookies)
+	(goto-char (point-max))
+	(eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
   (straight-use-package 'use-package)
+  (straight-use-package 'org)
  #+END_SRC
 
+
+ 
 *** Custom File
-First we set up our file for storing =customize= options and load it if it exists. 
+
+Set up our =customize= file and load it if it exists.
+
+
 #+BEGIN_SRC emacs-lisp 
   (setq custom-file "~/.emacs.d/emacs-custom.el")
   (when (file-exists-p custom-file)
     (load-file custom-file))
 #+END_SRC
 
+
+
 *** Nuisances
+
 We put a stop to a few minor annoyances. 
-#+BEGIN_SRC emacs-lisp 
-  (setq inhibit-startup-screen t)
-  (tool-bar-mode -1)
+#+BEGIN_SRC emacs-lisp
+  (setq native-comp-async-report-warnings-errors nil)
   (setq backup-directory-alist `(("." . "~/.emacs.d/saves/")))
   (when (eq system-type 'darwin)
-        (setq mac-option-modifier 'meta))
+    (setq mac-option-modifier 'meta))
 #+END_SRC
 
+
+
 *** Authinfo
+
 Keeping authinfo in plain text is pretty dangerous. Let's go ahead and set up GPG and use it to encrypt authinfo transparently. 
 #+BEGIN_SRC emacs-lisp
   ;; Transparent encryption
@@ -53,7 +90,10 @@ Keeping authinfo in plain text is pretty dangerous. Let's go ahead and set up GP
         '((:source "~/.authinfo.gpg")))
 #+END_SRC
 
+
+
 *** Stuff
+
 These items are here because I haven't figured out why I set them up in the first place. 
 #+BEGIN_SRC emacs-lisp
   (defun my/org-time-stamp-now ()
@@ -63,8 +103,25 @@ These items are here because I haven't figured out why I set them up in the firs
   (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
 
+
+
 * Packages
+
+
+*** Doom Themes
+#+begin_src emacs-lisp
+	(use-package spacegray-theme :straight t)
+	(use-package doom-themes
+	  :straight t
+	  :config
+	  (load-theme 'doom-horizon t))
+
+#+end_src
+
+
+
 *** Clojure Mode
+
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
     :straight t
@@ -78,11 +135,17 @@ These items are here because I haven't figured out why I set them up in the firs
     :straight t
     :hook (clojure-mode emacs-lisp-mode))
 #+END_SRC
+
+
+
 *** Pin Map version to built-in
 #+begin_src emacs-lisp
   (use-package map
     :straight (:type built-in))
 #+end_src
+
+
+
 *** Deft
 #+BEGIN_SRC emacs-lisp
   (use-package deft
@@ -93,6 +156,8 @@ These items are here because I haven't figured out why I set them up in the firs
                   deft-default-extension "md"
                   deft-extensions '("md" "org")))
 #+END_SRC
+
+
 
 *** Elfeed
 #+BEGIN_SRC emacs-lisp
@@ -125,6 +190,8 @@ These items are here because I haven't figured out why I set them up in the firs
     (setq rmh-elfeed-org-files (list "~/.emacs-git.d/elfeed.org")))
 #+END_SRC
 
+
+
 *** Counsel/Ivy
 #+BEGIN_SRC emacs-lisp
   (use-package counsel
@@ -146,6 +213,8 @@ These items are here because I haven't figured out why I set them up in the firs
 
 #+END_SRC
 
+
+
 *** Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
@@ -154,6 +223,8 @@ These items are here because I haven't figured out why I set them up in the firs
     :config
     (setq magit-define-global-key-bindings nil))
 #+END_SRC
+
+
 
 *** Mastodon
 #+BEGIN_SRC emacs-lisp
@@ -167,6 +238,8 @@ These items are here because I haven't figured out why I set them up in the firs
     :straight t)
 #+END_SRC
 
+
+
 *** Markdown Mode
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
@@ -174,6 +247,8 @@ These items are here because I haven't figured out why I set them up in the firs
     :mode ("README\\.md\\'" . gfm-mode)
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
+
+
 
 *** Notmuch Configuration
 #+BEGIN_SRC emacs-lisp
@@ -205,9 +280,14 @@ These items are here because I haven't figured out why I set them up in the firs
   ;;       (notmuch-show-tag (list "+deleted")))))
 #+END_SRC
 
+
+
 *** Org
 **** org-mode
 ***** TODO Break this section down and clean it up. 
+
+
+
 #+BEGIN_SRC emacs-lisp
   (use-package org
     :straight t
@@ -325,6 +405,8 @@ These items are here because I haven't figured out why I set them up in the firs
     :after org)
 #+END_SRC
 
+
+
 **** org-roam
 #+BEGIN_SRC emacs-lisp
   (use-package org-roam
@@ -351,6 +433,9 @@ These items are here because I haven't figured out why I set them up in the firs
     (org-roam-db-autosync-mode)
     )
 #+END_SRC
+
+
+
 *** Toolbox Tramp 
 #+BEGIN_SRC emacs-lisp
   (when (file-exists-p "/usr/bin/toolbox")
@@ -362,18 +447,18 @@ These items are here because I haven't figured out why I set them up in the firs
       (toolbox-tramp-flatpak-wrap t))) ; Use `flatpak-spawn' when conecting
 #+END_SRC
 
+
+
 *** UI Tweaks
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :straight t)
 
-  (use-package gruvbox-theme
-    :straight t
-    :config
-    (load-theme 'gruvbox-dark-soft t))
 
   (global-set-key (kbd "C-c w w") 'window-swap-states)
 #+END_SRC
+
+
 
 *** Yasnippets
 #+BEGIN_SRC emacs-lisp
@@ -389,6 +474,8 @@ These items are here because I haven't figured out why I set them up in the firs
                                   :repo "AndreaCrotti/yasnippet-snippets")
     :after yasnippet)
 #+END_SRC
+
+
 
 *** Element Client
 #+begin_src emacs-lisp
