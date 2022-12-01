@@ -92,18 +92,38 @@ Keeping authinfo in plain text is pretty dangerous. Let's go ahead and set up GP
 
 
 
-*** Stuff
+*** Convenience stuff
 
 These items are here because I haven't figured out why I set them up in the first place. 
 #+BEGIN_SRC emacs-lisp
   (defun my/org-time-stamp-now ()
     (interactive)
     (org-time-stamp '(16) t))
-  
+
   (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
 
 
+*** Eshell Aliases
+
+#+begin_src text emacs-lisp
+  (defun eshell/edit (file)
+         (find-file file))
+  (defun eshell/view (file)	
+         (find-file-read-only file))
+#+end_src
+
+** Snippets
+
+#+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/elisp-src-no-tangle
+# -*- mode: snippet -*-
+# name: elisp-src-no-tangle
+# key: <el
+# --
+,#+begin_src emacs-lisp 
+$0
+,#+end_src
+#+end_src
 
 * Packages
 
@@ -284,128 +304,161 @@ These items are here because I haven't figured out why I set them up in the firs
 
 *** Org
 **** org-mode
-***** TODO Break this section down and clean it up. 
+ 
+***** Basic org install 
+#+begin_src emacs-lisp
+    (use-package org
+      :straight t
+      :init
+      (defun org-latex-format-headline-colored-keywords-function
+          (todo todo-type priority text tags info)
+        (concat
+         (cond ((string= todo "TODO")(and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo)))
+               ((string= todo "DONE")(and todo (format "{\\color{green}\\bfseries\\sffamily %s} " todo))))
+         (and priority (format "\\framebox{\\#%c} " priority))
+         text
+         (and tags
+              (format "\\hfill{}\\textsc{%s}"
+                      (mapconcat (lambda (tag) (org-latex-plain-text tag info))
+                                 tags ":")))))
+#+end_src
 
+***** Set up convenience functions
 
+#+begin_src emacs-lisp 
+      (setq org-latex-format-headline-function 'org-latex-format-headline-colored-keywords-function)
 
-#+BEGIN_SRC emacs-lisp
-  (use-package org
-    :straight t
-    :init
-    (defun org-latex-format-headline-colored-keywords-function
-        (todo todo-type priority text tags info)
-      (concat
-       (cond ((string= todo "TODO")(and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo)))
-             ((string= todo "DONE")(and todo (format "{\\color{green}\\bfseries\\sffamily %s} " todo))))
-       (and priority (format "\\framebox{\\#%c} " priority))
-       text
-       (and tags
-            (format "\\hfill{}\\textsc{%s}"
-                    (mapconcat (lambda (tag) (org-latex-plain-text tag info))
-                               tags ":")))))
+      (defun my/get-journal-file-today (&optional visit)
+        "Capture to, or optionally visit, today's journal file."
+        (interactive)
+        (let* (
+               (curr-date-stamp (format-time-string "%Y-%m.org"))
+               (file-name (expand-file-name curr-date-stamp "~/org/pages/")))
+          (if visit
+              (find-file file-name)
+              (set-buffer (org-capture-target-buffer file-name)))
+          (goto-char (point-max))))
 
-    (setq org-latex-format-headline-function 'org-latex-format-headline-colored-keywords-function)
+      (defun my/visit-journal-file-today ()
+        "Visit daily journal file." 
+        (interactive)
+        (my/get-journal-file-today t))
 
-    (defun my/get-journal-file-today (&optional visit)
-      "Capture to, or optionally visit, today's journal file."
-      (interactive)
-      (let* (
-             (curr-date-stamp (format-time-string "%Y-%m.org"))
-             (file-name (expand-file-name curr-date-stamp "~/org/pages/")))
-        (if visit
-            (find-file file-name)
-            (set-buffer (org-capture-target-buffer file-name)))
-        (goto-char (point-max))))
+      (defun my/visit-inbox ()
+        (interactive)
+        (find-file "~/org/beorg/inbox.org"))
 
-    (defun my/visit-journal-file-today ()
-      "Visit daily journal file." 
-      (interactive)
-      (my/get-journal-file-today t))
+      (defun my/visit-projects ()
+        (interactive)
+        (find-file "~/org/projects/index.org"))
 
-    (defun my/visit-inbox ()
-      (interactive)
-      (find-file "~/org/beorg/inbox.org"))
+#+end_src
 
-    (defun my/visit-projects ()
-      (interactive)
-      (find-file "~/org/projects/index.org"))
+***** UI and friends
 
-    (setq org-hide-leading-stars t) 
-    (setq org-tag-alist '((:startgroup . nil)
-                          ("@work" . ?w)("@home" . ?h)
-                          (:endgroup . nil)
-                          ("@note" . ?o)("@next" . ?n)("@urgent" . ?u)
-                          ))
-    (setq org-feed-alist
-          '(("Krebs"
-             "https://krebsonsecurity.com/feed/"
-             "~/org/pages/feeds.org" "Krebs on Security")
-            ("Bleeping Computer"
-             "https://www.bleepingcomputer.com/feed/"
-             "~/org/pages/feeds.org" "Bleeping Computer")))
-
-    (setq org-capture-templates
-          '(("t" "Inbox TODO"
-             entry (file+headline "~/org/beorg/inbox.org" "Todo")
-             "* TODO %?\n    SCHEDULED: %t\n %a"
-             :empty-lines 1)
-            ("b" "Book"
-             entry (file "~/org/beorg/reading.org")
-             "* %^{TITLE} %^{AUTHOR}p %^{PUBLISHED}p %^{PAGES|Unspec}p %^{RATING}p"
-             :empty-lines 1)
-            ("J" "Journal TODO"
-             entry (function my/get-journal-file-today)
-             "* TODO %?\n    SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
-             :empty-lines 1)
-            ("j" "Daily Journal Entry"
-             entry (function my/get-journal-file-today)
-             "* %? \n  --Entered on %U\n %i\n  %a"
-             :empty-lines 1)
-            ))
-
-
-    (defun org-dtp-open (record-location)
-      "Visit the dtp message with the given Message-ID."
-      (shell-command (concat "open x-devonthink-item:" record-location)))
-    (setq org-odt-preferred-output-format "docx")
-
-    :bind (("C-c l" . org-store-link)
-           ("C-c c" . org-capture)
-           ("C-c a" . org-agenda)
-           ("C-c o S" . org-save-all-org-buffers)
-           ("C-c p j" . my/visit-journal-file-today)
-           ("C-c p i" . my/visit-inbox)
-           ("C-c p p" . my/visit-projects)
-           ("C-c o p" . org-property-action))
-    :config
-    (setq org-agenda-files (list
-                            "~/org/pages/"
-                            "~/org/beorg/"
-                            "~/org/projects/"
+#+begin_src emacs-lisp 
+      (setq org-hide-leading-stars t) 
+      (setq org-tag-alist '((:startgroup . nil)
+                            ("@work" . ?w)("@home" . ?h)
+                            (:endgroup . nil)
+                            ("@note" . ?o)("@next" . ?n)("@urgent" . ?u)
                             ))
-    (setq org-archive-location "~/org/archived.org::datetree/* Completed")
-    (setq org-export-backends '(ascii html icalendar latex odt md))
-    (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
-    (setq org-startup-indented t)
-    (setq org-log-done t)
-    (setq org-skip-scheduled-if-done t)
-    (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-    (org-add-link-type "x-devonthink-item" 'org-dtp-open)
-    )
+      (setq org-feed-alist
+            '(("Krebs"
+               "https://krebsonsecurity.com/feed/"
+               "~/org/pages/feeds.org" "Krebs on Security")
+              ("Bleeping Computer"
+               "https://www.bleepingcomputer.com/feed/"
+               "~/org/pages/feeds.org" "Bleeping Computer")))
 
+#+end_src
 
+***** Org capture templates
+
+#+begin_src emacs-lisp 
+  (setq org-capture-templates
+        '(("t" "Inbox TODO"
+           entry (file+headline "~/org/beorg/inbox.org" "Todo")
+           "* TODO %?\n    SCHEDULED: %t\n %a"
+           :empty-lines 1)
+          ("b" "Book"
+           entry (file "~/org/beorg/reading.org")
+           "* %^{TITLE} %^{AUTHOR}p %^{PUBLISHED}p %^{PAGES|Unspec}p %^{RATING}p"
+           :empty-lines 1)
+          ("J" "Journal TODO"
+           entry (function my/get-journal-file-today)
+           "* TODO %?\n    SCHEDULED: %t\n  --Entered on %U\n  %i\n  %a"
+           :empty-lines 1)
+          ("j" "Daily Journal Entry"
+           entry (function my/get-journal-file-today)
+           "* %? \n  --Entered on %U\n %i\n  %a"
+           :empty-lines 1)
+          ))
+
+      #+end_src
+
+***** Export org files for Word users
+
+#+begin_src emacs-lisp 
+      (defun org-dtp-open (record-location)
+        "Visit the dtp message with the given Message-ID."
+        (shell-command (concat "open x-devonthink-item:" record-location)))
+      (setq org-odt-preferred-output-format "docx")
+#+end_src
+
+***** Key bindings 
+
+#+begin_src emacs-lisp 
+      :bind (("C-c l" . org-store-link)
+             ("C-c c" . org-capture)
+             ("C-c a" . org-agenda)
+             ("C-c o S" . org-save-all-org-buffers)
+             ("C-c p j" . my/visit-journal-file-today)
+             ("C-c p i" . my/visit-inbox)
+             ("C-c p p" . my/visit-projects)
+             ("C-c o p" . org-property-action))
+
+#+end_src
+
+***** Agenda and refile
+
+#+begin_src emacs-lisp 
+  :config
+  (setq org-agenda-files (list
+                          "~/org/pages/"
+                          "~/org/beorg/"
+                          "~/org/projects/"
+                          ))
+  (setq org-archive-location "~/org/archived.org::datetree/* Completed")
+  (setq org-export-backends '(ascii html icalendar latex odt md))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
+  (setq org-startup-indented t)
+  (setq org-log-done t)
+  (setq org-skip-scheduled-if-done t)
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  (org-add-link-type "x-devonthink-item" 'org-dtp-open)
+  )
+
+#+end_src
+
+**** Org Superstar
+
+#+begin_src emacs-lisp 
   (use-package org-superstar
     :straight t
     :after org
     :hook (org-mode . org-superstar-mode))
 
+#+end_src
 
-  (use-package ol-notmuch
-    :straight t
-    :after org)
-#+END_SRC
+**** OL Notmuch
 
-
+#+begin_src emacs-lisp 
+  (unless (eq system-type 'windows-nt)
+    (use-package ol-notmuch
+      :straight t
+      :after org))
+#+end_src
 
 **** org-roam
 #+BEGIN_SRC emacs-lisp
@@ -484,3 +537,11 @@ These items are here because I haven't figured out why I set them up in the firs
                    :host github
                    :repo "alphapapa/ement.el"))
 #+end_src
+
+* Local Variables
+File will prompt to tangle and reload on every save.
+
+;; Local Variables:
+;; eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Reload?")(load-file user-init-file))) nil t)
+;; eval: (add-hook 'after-save-hook (lambda ()(if (y-or-n-p "Tangle?")(org-babel-tangle))) nil t)
+;; End:
