@@ -106,7 +106,7 @@ These items are here because I haven't figured out why I set them up in the firs
 
 *** Eshell Aliases
 
-#+begin_src text emacs-lisp
+#+begin_src emacs-lisp
   (defun eshell/edit (file)
          (find-file file))
   (defun eshell/view (file)	
