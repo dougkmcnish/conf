@@ -1,4 +1,6 @@
+#+STARTUP: content
 #+PROPERTY: header-args :tangle ~/.emacs.d/init.el
+
 * Core configuration Opts
 ** Init Stuff
 *** Warning
@@ -99,7 +101,10 @@ These items are here because I haven't figured out why I set them up in the firs
   (defun my/org-time-stamp-now ()
     (interactive)
     (org-time-stamp '(16) t))
-
+  (defun my/open-config ()
+    (interactive)
+    (find-file "~/.emacs-git.d/config.org"))
+  (global-set-key (kbd "C-c o c") 'my/open-config)
   (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
 
@@ -113,6 +118,7 @@ These items are here because I haven't figured out why I set them up in the firs
          (find-file-read-only file))
 #+end_src
 
+
 ** Snippets
 
 #+begin_src emacs-lisp :tangle ~/.emacs.d/snippets/org-mode/elisp-src-no-tangle
@@ -124,6 +130,7 @@ These items are here because I haven't figured out why I set them up in the firs
 $0
 ,#+end_src
 #+end_src
+
 
 * Packages
 
@@ -537,6 +544,7 @@ $0
                    :host github
                    :repo "alphapapa/ement.el"))
 #+end_src
+
 
 * Local Variables
 File will prompt to tangle and reload on every save.
