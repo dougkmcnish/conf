@@ -114,7 +114,7 @@ These items are here because I haven't figured out why I set them up in the firs
 	(use-package doom-themes
 	  :straight t
 	  :config
-	  (load-theme 'doom-horizon t))
+	  (load-theme 'doom-nord-light t))
 
 #+end_src
 
