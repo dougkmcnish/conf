@@ -20,8 +20,8 @@
   (set-fringe-mode 10)
   (menu-bar-mode -1)
 
-  (set-frame-parameter (selected-frame) 'alpha '(98 . 80))
-  (add-to-list 'default-frame-alist '(alpha . (98 . 80)))
+  (set-frame-parameter (selected-frame) 'alpha '(90 . 80))
+  (add-to-list 'default-frame-alist '(alpha . (90 . 80)))
 #+end_src
 
 
@@ -101,10 +101,14 @@ These items are here because I haven't figured out why I set them up in the firs
   (defun my/org-time-stamp-now ()
     (interactive)
     (org-time-stamp '(16) t))
+
   (defun my/open-config ()
     (interactive)
     (find-file "~/.emacs-git.d/config.org"))
+  
   (global-set-key (kbd "C-c o c") 'my/open-config)
+
+
   (add-to-list 'exec-path "~/.local/bin/")
 #+END_SRC
 
