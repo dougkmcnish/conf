@@ -546,7 +546,11 @@ $0
   (use-package ement
   :straight (ement :type git
                    :host github
-                   :repo "alphapapa/ement.el"))
+                   :repo "alphapapa/ement.el")
+  :init
+  (defun my/ement-connect ()
+    (interactive)
+    (ement-connect :uri-prefix "http://localhost:8009")))
 #+end_src
 
 
