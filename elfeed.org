@@ -2,6 +2,12 @@
 ** A List News :mustread:
 *** [[https://www.bellingcat.com/feed/][bellingcat]] :security:
 *** [[https://www.totalhipaa.com/feed/][Total HIPAA Compliance]]
+
+** Reddit :foss:reddit:
+*** [[https://www.reddit.com/r/emacs/.rss][Emacs Reddit]] 
+*** [[https://www.reddit.com/r/guix/.rss][GNU Guix]] 
+*** [[https://www.reddit.com/r/nixos/.rss][NixOS]]
+
 ** Blog :blogs:
 *** [[https://feeds.feedburner.com/all-this][And now it’s all this]]
 *** [[https://anildash.com/rss/][Anil Dash]]

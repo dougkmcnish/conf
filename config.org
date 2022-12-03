@@ -266,8 +266,11 @@ $0
     (setq mastodon-instance-url "https://infosec.exchange"
           mastodon-active-user "flagranterror")
     )
+  
   (use-package emojify
-    :straight t)
+    :straight t
+    :init
+    (add-hook 'after-init-hook #'global-emojify-mode))
 #+END_SRC
 
 
@@ -280,6 +283,7 @@ $0
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
+*** YAML Mode
 
 #+begin_src emacs-lisp 
   (use-package yaml-mode
@@ -287,6 +291,13 @@ $0
   :mode
   ("\\.yml\\'" . yaml-mode)
   ("\\.bu\\'" . yaml-mode))
+#+end_src
+
+*** CSV Mode
+
+#+begin_src emacs-lisp 
+  (use-package csv-mode
+  :straight t)
 #+end_src
 
 
@@ -550,7 +561,7 @@ $0
 
 
 
-*** Element Client
+*** Matrix Client
 #+begin_src emacs-lisp
   (use-package ement
   :straight (ement :type git
