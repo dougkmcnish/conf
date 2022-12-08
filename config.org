@@ -311,6 +311,7 @@ $0
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
 
+
 *** YAML Mode
 
 #+begin_src emacs-lisp 
@@ -321,11 +322,22 @@ $0
   ("\\.bu\\'" . yaml-mode))
 #+end_src
 
+
 *** CSV Mode
 
 #+begin_src emacs-lisp 
   (use-package csv-mode
   :straight t)
+#+end_src
+
+
+*** pdf-tools
+
+#+begin_src emacs-lisp
+      (use-package pdf-tools
+        :straight t
+        :init
+        (pdf-loader-install))
 #+end_src
 
 
@@ -521,6 +533,10 @@ $0
 
 **** org-roam
 #+BEGIN_SRC emacs-lisp
+  (when (eq system-type 'windows-nt)
+    (use-package emacsql-sqlite3
+      :straight t))
+
   (use-package org-roam
     :straight t
     :init
@@ -542,8 +558,11 @@ $0
            ("C-c r d" . org-roam-dailies-goto-date)
            )
     :config
+    (when (eq system-type 'windows-nt)
+        (setq org-roam-database-connector 'sqlite3))
     (org-roam-db-autosync-mode)
     )
+
 #+END_SRC
 
 
