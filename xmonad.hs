@@ -63,7 +63,7 @@ myConfig = def
         spawnOnce "emacs --daemon &"
         spawnOnce "xsetroot -cursor_name left_ptr &"
         spawnOnce "~/.fehbg &"
-        spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --tint 0x29293d --height 38 &"
+        spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --alpha 0 --tint 0x29293d --height 22 &"
     }
     `additionalKeysP`
     [ ("M-S-z"                   , spawn "i3lock -c 000000")

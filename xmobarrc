@@ -1,8 +1,8 @@
 Config { overrideRedirect = False
-       , font     = "xft:iosevka-18"
+       , font     = "xft:Bitstream Vera Sans Mono:size=9:bold:antialias=true"
        , bgColor  = "#29293d"
        , fgColor  = "#f8f8f2"
-       , position = Static { xpos = 0, ypos = 0, width = 3456 , height = 38 }
+       , position = Static { xpos = 0, ypos = 0, width = 1728 , height = 22 }
        , commands = [ Run Weather "KCHA"
                         [ "--template", "<weather> <tempF>°F"
                         , "-L", "32"
@@ -38,5 +38,5 @@ Config { overrideRedirect = False
                     ]
        , sepChar  = "%"
        , alignSep = "}{"
-       , template = "%XMonadLog% }{ %alsa:default:Master% <fc=#8be9fd>::</fc> %cpu% <fc=#8be9fd>::</fc> %memory% * %swap% <fc=#8be9fd>::</fc> %KCHA% <fc=#8be9fd>::</fc> %date% "
+       , template = "%XMonadLog% }{ %battery% <fc=#8be9fd>::</fc> %alsa:default:Master% <fc=#8be9fd>::</fc> %cpu% <fc=#8be9fd>::</fc> %memory% * %swap% <fc=#8be9fd>::</fc> %KCHA% <fc=#8be9fd>::</fc> %date% "
        }

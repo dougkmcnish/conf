@@ -196,15 +196,8 @@ $0
 *** Haskell Mode
 #+begin_src emacs-lisp
   (use-package haskell-mode
-<<<<<<< Updated upstream
   :straight t)
 #+end_src
-
-=======
-    :straight t)
-#+end_src
-
-
 
 *** Nix Mode
 
@@ -215,9 +208,8 @@ $0
 #+end_src
 
 
->>>>>>> Stashed changes
-
 *** Pin Map version to built-in
+
 #+begin_src emacs-lisp
   (use-package map
     :straight (:type built-in))
