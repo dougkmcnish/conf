@@ -242,6 +242,7 @@ $0
     :init
     (elfeed-protocol-enable)
     :config
+    (setq elfeed-protocol-enabled-protocols '(newsblur))
     (setq elfeed-use-curl t)
     (setq elfeed-protocol-newsblur-maxpages 20)
     (setq elfeed-curl-extra-arguments '("--cookie-jar" "/tmp/newsblur-cookie"
