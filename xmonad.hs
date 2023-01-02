@@ -62,6 +62,7 @@ myConfig = def
     , startupHook = do
         spawnOnce "emacs --daemon &"
         spawnOnce "xsetroot -cursor_name left_ptr &"
+        spawnOnce "picom &"
         spawnOnce "~/.fehbg &"
         spawnOnce "trayer --edge top --align right --SetDockType true --SetPartialStrut true --expand true --width 10 --transparent true --alpha 0 --tint 0x29293d --height 22 &"
     }

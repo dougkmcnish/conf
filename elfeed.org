@@ -28,15 +28,18 @@
 *** [[https://shapeof.com/feed.json][The Shape of Everything]]
 *** [[https://whatever.scalzi.com/feed/][Whatever]]
 *** [[https://www.gentlemanstationer.com/blog?format=rss][The Gentleman Stationer]]
+
 ** Cartoons & Comics :comics:
 *** [[http://feeds.penny-arcade.com/pa-mainsite][Penny Arcade]]
 *** [[https://feeds.feedburner.com/PoorlyDrawnLines?format=xml][Poorly Drawn Lines]]
 *** [[https://www.smbc-comics.com/comic/rss][Saturday Morning Breakfast Cereal]]
+
 ** Publications :publications:
 *** [[http://feeds.arstechnica.com/arstechnica/index/][Ars Technica - All content]]
 *** [[https://krebsonsecurity.com/feed/][Krebs on Security]]
 *** [[https://www.theonion.com/rss][The Onion]]
 *** [[https://www.theverge.com/rss/index.xml][The Verge -  All Posts]]
+
 ** Threat Intelligence :threats:
 *** [[https://www.zerodayinitiative.com/rss/published/][ZDI: Published Advisories]]
 *** [[https://www.vmware.com/security/advisories.xml][VMware Security Advisory]]
@@ -56,6 +59,7 @@
 *** [[https://rss.packetstormsecurity.com/news/tags/malware/][Malware News  -  Packet Storm]]
 *** [[https://www.cyber.gov.au/rssfeed/2][Latest threat advice]]
 *** [[https://www.cisa.gov/uscert/ncas/bulletins.xml][CISA Bulletins]]
+
 ** Security News :security:
 *** [[https://www.theregister.com/security/headlines.atom][The Register - Security]]
 *** [[https://feeds.feedburner.com/TheHackersNews][The Hacker News]]
