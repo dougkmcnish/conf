@@ -194,10 +194,12 @@ $0
 
 
 *** Haskell Mode
+
 #+begin_src emacs-lisp
   (use-package haskell-mode
   :straight t)
 #+end_src
+
 
 *** Nix Mode
 
@@ -216,8 +218,16 @@ $0
 #+end_src
 
 
+*** Discover mode
+
+#+begin_src emacs-lisp
+  (use-package discover
+    :straight t)
+#+end_src
+
 
 *** Deft
+
 #+BEGIN_SRC emacs-lisp
   (use-package deft
     :straight t
