@@ -87,11 +87,11 @@ We put a stop to a few minor annoyances.
 Keeping authinfo in plain text is pretty dangerous. Let's go ahead and set up GPG and use it to encrypt authinfo transparently. 
 #+BEGIN_SRC emacs-lisp
   ;; Transparent encryption
-  (setenv "GPG_AGENT_INFO" nil)
-  (setq epg-pinentry-mode 'loopback)
-
+  ; (setenv "GPG_AGENT_INFO" nil)
+  ; (setq epg-pinentry-mode 'loopback)
+  
   (setq auth-sources
-        '((:source "~/.authinfo.gpg")))
+        '((:source "~/.authinfo.age")))
 #+END_SRC
 
 
@@ -281,6 +281,23 @@ $0
         :straight t)
 #+END_SRC
 
+
+*** Rage Encryption
+
+#+begin_src emacs-lisp
+  (use-package age
+    :straight (age :type git
+                   :host github
+                   :repo "anticomputer/age.el")
+    :demand
+    :custom
+    (age-program "rage")
+    (age-debug t)
+    (age-default-identity "~/.rage/testkey.txt")
+    (age-default-recipient "~/.rage/test.txt")
+    :config
+    (age-file-enable))
+#+end_src
 
 
 *** Counsel/Ivy
