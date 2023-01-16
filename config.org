@@ -398,6 +398,13 @@ $0
 #+END_SRC
 
 
+
+*** LaTeX
+#+begin_src emacs-lisp
+  (use-package tex
+    :straight t)
+#+end_src
+
 *** YAML Mode
 
 #+begin_src emacs-lisp 
@@ -464,20 +471,21 @@ $0
  
 ***** Basic org install 
 #+begin_src emacs-lisp
-    (use-package org
-      :straight t
-      :init
-      (defun org-latex-format-headline-colored-keywords-function
-          (todo todo-type priority text tags info)
-        (concat
-         (cond ((string= todo "TODO")(and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo)))
-               ((string= todo "DONE")(and todo (format "{\\color{green}\\bfseries\\sffamily %s} " todo))))
-         (and priority (format "\\framebox{\\#%c} " priority))
-         text
-         (and tags
-              (format "\\hfill{}\\textsc{%s}"
-                      (mapconcat (lambda (tag) (org-latex-plain-text tag info))
-                                 tags ":")))))
+  (use-package org
+    :straight t
+    :init
+    (require 'ox-beamer)
+    (defun org-latex-format-headline-colored-keywords-function
+        (todo todo-type priority text tags info)
+      (concat
+       (cond ((string= todo "TODO")(and todo (format "{\\color{red}\\bfseries\\sffamily %s} " todo)))
+             ((string= todo "DONE")(and todo (format "{\\color{green}\\bfseries\\sffamily %s} " todo))))
+       (and priority (format "\\framebox{\\#%c} " priority))
+       text
+       (and tags
+            (format "\\hfill{}\\textsc{%s}"
+                    (mapconcat (lambda (tag) (org-latex-plain-text tag info))
+                               tags ":")))))
 #+end_src
 
 ***** Set up convenience functions
