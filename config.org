@@ -26,6 +26,35 @@
 #+end_src
 
 
+*** Quelpa
+Let's start breaking our emacs to make it better
+
+#+begin_src emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+  (when (not package-archive-contents)
+    (package-refresh-contents))
+
+  (package-install 'use-package)
+
+    (use-package use-package-ensure
+        :config  (setq use-package-always-ensure t))
+
+    (unless (package-installed-p 'quelpa)
+      (with-temp-buffer
+          (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+          (eval-buffer)
+          (quelpa-self-upgrade)))
+      (quelpa
+       '(quelpa-use-package
+         :fetcher git
+         :url "https://github.com/quelpa/quelpa-use-package.git"))
+      (require 'quelpa-use-package)
+
+#+end_src
+
+
 *** straight.el
 
 First things first, we configure =straight.el= to manage our packages. We select the =develop= branch
@@ -35,23 +64,23 @@ We immediately load =org= and =use-package= so theyre available to the system AS
 
 
 #+BEGIN_SRC emacs-lisp
-  (setq straight-repository-branch "develop")
+  ;; (setq straight-repository-branch "develop")
 
-  (defvar bootstrap-version)
-  (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 6))
-    (unless (file-exists-p bootstrap-file)
-      (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
+  ;; (defvar bootstrap-version)
+  ;; (let ((bootstrap-file
+  ;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+  ;;       (bootstrap-version 6))
+  ;;   (unless (file-exists-p bootstrap-file)
+  ;;     (with-current-buffer
+  ;; 	(url-retrieve-synchronously
+  ;; 	 "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+  ;; 	 'silent 'inhibit-cookies)
+  ;;       (goto-char (point-max))
+  ;;       (eval-print-last-sexp)))
+  ;;   (load bootstrap-file nil 'nomessage))
 
-  (straight-use-package 'use-package)
-  (straight-use-package 'org)
+  ;; (straight-use-package 'use-package)
+  ;; (straight-use-package 'org)
  #+END_SRC
 
 
@@ -125,6 +154,7 @@ These items are here because I haven't figured out why I set them up in the firs
   (setq message-send-mail-function 'smtpmail-send-it)
 
 #+end_src
+
 #+begin_src emacs-lisp
   
   (setq user-mail-address "doug@mcnishes.com"
@@ -166,9 +196,9 @@ $0
 *** Doom Themes
 
 #+begin_src emacs-lisp
-	(use-package spacegray-theme :straight t)
+	(use-package spacegray-theme :ensure t)
 	(use-package doom-themes
-	  :straight t
+	  :ensure t
 	  :config
 	  (load-theme 'doom-acario-dark t))
 
@@ -180,15 +210,15 @@ $0
 
 #+BEGIN_SRC emacs-lisp
   (use-package clojure-mode
-    :straight t
+    :ensure t
     :mode (("\\.clj\\'" . clojure-mode)
            ("\\.edn\\'" . clojure-mode)))
 
   (use-package cider
-    :straight t)
+    :ensure t)
 
   (use-package paredit
-    :straight t
+    :ensure t
     :hook (clojure-mode emacs-lisp-mode))
 #+END_SRC
 
@@ -197,7 +227,7 @@ $0
 
 #+begin_src emacs-lisp
   (use-package haskell-mode
-  :straight t)
+  :ensure t)
 #+end_src
 
 
@@ -205,7 +235,6 @@ $0
 
 #+begin_src emacs-lisp
   (use-package nix-mode
-    :straight t
     :mode "\\.nix\\'")
 #+end_src
 
@@ -213,16 +242,14 @@ $0
 *** Pin Map version to built-in
 
 #+begin_src emacs-lisp
-  (use-package map
-    :straight (:type built-in))
+  (use-package map)
 #+end_src
 
 
 *** Discover mode
 
 #+begin_src emacs-lisp
-  (use-package discover
-    :straight t)
+  (use-package discover)
 #+end_src
 
 
@@ -230,7 +257,6 @@ $0
 
 #+BEGIN_SRC emacs-lisp
   (use-package deft
-    :straight t
     :bind ("<f8>" . deft)
     :commands (deft)
     :config (setq deft-directory "~/.deft"
@@ -244,12 +270,12 @@ $0
 #+BEGIN_SRC emacs-lisp
       (use-package elfeed
         :bind (("C-c o e" . elfeed))
-        :straight t
+        :ensure t
         :config
         (setq shr-max-image-proportion 0.3))
 
       ;; (use-package elfeed-protocol
-      ;;   :straight t
+      ;;   :ensure t
       ;;   :after elfeed
       ;;   :init
       ;;   (elfeed-protocol-enable)
@@ -267,10 +293,10 @@ $0
 
       (use-package elfeed-autotag
         :after elfeed
-        :straight t)
+        :ensure t)
 
        (use-package elfeed-org
-         :straight t
+         :ensure t
          :after elfeed
          :init
          (elfeed-org)
@@ -278,7 +304,7 @@ $0
          (setq rmh-elfeed-org-files (list "~/.conf.git/elfeed.org")))
 
       (use-package elfeed-web
-        :straight t)
+        :ensure t)
 #+END_SRC
 
 
@@ -286,9 +312,8 @@ $0
 
 #+begin_src emacs-lisp
   (use-package age
-    :straight (age :type git
-                   :host github
-                   :repo "anticomputer/age.el")
+    :quelpa (age :fetcher github
+                 :repo "anticomputer/age.el")
     :demand
     :custom
     (age-program "rage")
@@ -303,7 +328,7 @@ $0
 *** Counsel/Ivy
 #+BEGIN_SRC emacs-lisp
   ;; (use-package counsel
-  ;;   :straight t
+  ;;   :ensure t
   ;;   :bind (("M-x" . counsel-M-x)
   ;;          ("C-x C-f" . counsel-find-file)
   ;;          ))
@@ -317,7 +342,7 @@ $0
   ;;   :config (ivy-mode 1))
 
   ;; (use-package swiper
-  ;;   :straight t)
+  ;;   :ensure t)
 
 #+END_SRC
 
@@ -327,7 +352,7 @@ $0
 
 #+begin_src emacs-lisp
   (use-package helm
-        :straight t
+        :ensure t
         :bind
         (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
@@ -364,7 +389,7 @@ $0
 *** Magit
 #+BEGIN_SRC emacs-lisp
   (use-package magit
-    :straight t
+    :ensure t
     :bind (("C-c g" . magit-file-dispatch))
     :config
     (setq magit-define-global-key-bindings nil))
@@ -375,14 +400,13 @@ $0
 *** Mastodon
 #+BEGIN_SRC emacs-lisp
   (use-package mastodon
-    :straight (mastodon :host codeberg :branch "develop" :repo "martianh/mastodon.el")
+    :quelpa (mastodon :fetcher git :branch "develop" :url "https://www.codeberg.org/martianh/mastodon.el")
     :init
     (setq mastodon-instance-url "https://infosec.exchange"
-          mastodon-active-user "flagranterror")
+	  mastodon-active-user "flagranterror")
     )
-  
+
   (use-package emojify
-    :straight t
     :init
     (add-hook 'after-init-hook #'global-emojify-mode))
 #+END_SRC
@@ -392,7 +416,7 @@ $0
 *** Markdown Mode
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode
-    :straight t
+    :ensure t
     :mode ("README\\.md\\'" . gfm-mode)
     :init (setq markdown-command "multimarkdown"))
 #+END_SRC
@@ -402,14 +426,14 @@ $0
 *** LaTeX
 #+begin_src emacs-lisp
   (use-package tex
-    :straight t)
+    :ensure auctex)
 #+end_src
 
 *** YAML Mode
 
 #+begin_src emacs-lisp 
   (use-package yaml-mode
-  :straight t
+  :ensure t
   :mode
   ("\\.yml\\'" . yaml-mode)
   ("\\.bu\\'" . yaml-mode))
@@ -420,7 +444,7 @@ $0
 
 #+begin_src emacs-lisp 
   (use-package csv-mode
-  :straight t)
+  :ensure t)
 #+end_src
 
 
@@ -428,7 +452,7 @@ $0
 
 #+begin_src emacs-lisp
       (use-package pdf-tools
-        :straight t
+        :ensure t
         :init
         (pdf-loader-install))
 #+end_src
@@ -445,7 +469,7 @@ $0
   ;;         message-send-mail-function 'message-send-mail-with-sendmail)
 
   ;;   (use-package notmuch
-  ;;     :straight t
+  ;;     :ensure t
   ;;     :bind (("C-c o m" . notmuch))
   ;;     :config
   ;;     (define-key notmuch-show-mode-map "d"
@@ -472,7 +496,7 @@ $0
 ***** Basic org install 
 #+begin_src emacs-lisp
   (use-package org
-    :straight t
+    :ensure t
     :init
     (require 'ox-beamer)
     (defun org-latex-format-headline-colored-keywords-function
@@ -610,7 +634,7 @@ $0
 
 #+begin_src emacs-lisp 
   (use-package org-superstar
-    :straight t
+    :ensure t
     :after org
     :hook (org-mode . org-superstar-mode))
 
@@ -621,7 +645,7 @@ $0
 #+begin_src emacs-lisp 
   ;; (unless (eq system-type 'windows-nt)
   ;;   (use-package ol-notmuch
-  ;;     :straight t
+  ;;     :ensure t
   ;;     :after org))
 #+end_src
 
@@ -629,10 +653,10 @@ $0
 #+BEGIN_SRC emacs-lisp
   (when (eq system-type 'windows-nt)
     (use-package emacsql-sqlite3
-      :straight t))
+      :ensure t))
 
   (use-package org-roam
-    :straight t
+    :ensure t
     :init
     (setq org-roam-directory (file-truename "~/org/org-roam"))  
     (setq org-roam-dailies-directory "daily/")
@@ -666,13 +690,12 @@ $0
 On Fedora Silverblue and friends, we may need to use =Toolbox= to enter
 a container from a =Flatpak= install. 
 #+BEGIN_SRC emacs-lisp
-  (when (file-exists-p "/usr/bin/toolbox")
-    (use-package toolbox-tramp
-      :straight (toolbox-tramp :type git
-                               :host github
-                               :repo "fejfighter/toolbox-tramp")
-      :custom
-      (toolbox-tramp-flatpak-wrap t))) ; Use `flatpak-spawn' when conecting
+   (when (file-exists-p "/usr/bin/toolbox")
+     (use-package toolbox-tramp
+       :quelpa (toolbox-tramp :fetcher github
+                                :repo "fejfighter/toolbox-tramp")
+       :custom
+       (toolbox-tramp-flatpak-wrap t))) ; Use `flatpak-spawn' when conecting
 #+END_SRC
 
 
@@ -680,7 +703,7 @@ a container from a =Flatpak= install.
 *** UI Tweaks
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
-    :straight t)
+    :ensure t)
 
 
   (global-set-key (kbd "C-c w w") 'window-swap-states)
@@ -691,15 +714,14 @@ a container from a =Flatpak= install.
 *** Yasnippets
 #+BEGIN_SRC emacs-lisp
   (use-package yasnippet
-    :straight t
+    :ensure t
     :diminish
     :config
     (yas-global-mode 1))
 
   (use-package yasnippet-snippets
-    :straight (yasnippet-snippets :type git
-                                  :host github
-                                  :repo "AndreaCrotti/yasnippet-snippets")
+    :quelpa (yasnippet-snippets :fetcher github
+                               :repo "AndreaCrotti/yasnippet-snippets")
     :after yasnippet)
 #+END_SRC
 
@@ -708,13 +730,12 @@ a container from a =Flatpak= install.
 *** Matrix Client
 #+begin_src emacs-lisp
   (use-package ement
-  :straight (ement :type git
-                   :host github
-                   :repo "alphapapa/ement.el")
-  :init
-  (defun my/ement-connect ()
-    (interactive)
-    (ement-connect :uri-prefix "http://localhost:8009")))
+    :quelpa (ement :fetcher github
+		   :repo "alphapapa/ement.el")
+    :init
+    (defun my/ement-connect ()
+      (interactive)
+      (ement-connect :uri-prefix "http://localhost:8009")))
 #+end_src
 
 
